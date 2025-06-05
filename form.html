@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Neural Genesis - Eligibility Assessment</title>
+
+    <style>
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        body {
+
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+
+            color: #ffffff;
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+
+        }
+
+
+
+        .container {
+
+            max-width: 800px;
+
+            margin: 0 auto;
+
+            padding: 2rem;
+
+            position: relative;
+
+        }
+
+
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 3rem;
+
+            position: relative;
+
+        }
+
+
+
+        .logo {
+
+            font-size: 2.5rem;
+
+            font-weight: 700;
+
+            background: linear-gradient(45deg, #00f5ff, #ff00ff, #ffff00);
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+
+            margin-bottom: 1rem;
+
+            animation: glow 2s ease-in-out infinite alternate;
+
+        }
+
+
+
+        @keyframes glow {
+
+            from {
+                filter: drop-shadow(0 0 20px rgba(0, 245, 255, 0.3));
+            }
+
+            to {
+                filter: drop-shadow(0 0 30px rgba(255, 0, 255, 0.4));
+            }
+
+        }
+
+
+
+        .subtitle {
+
+            font-size: 1.2rem;
+
+            color: #a0a0a0;
+
+            margin-bottom: 2rem;
+
+            line-height: 1.6;
+
+        }
+
+
+
+        .warning-banner {
+
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 140, 0, 0.1));
+
+            border: 1px solid rgba(255, 69, 0, 0.3);
+
+            padding: 1.5rem;
+
+            border-radius: 10px;
+
+            margin-bottom: 2rem;
+
+            text-align: center;
+
+        }
+
+
+
+        .warning-banner h3 {
+
+            color: #ff6b35;
+
+            margin-bottom: 0.5rem;
+
+            font-size: 1.1rem;
+
+        }
+
+
+
+        .form-container {
+
+            background: rgba(255, 255, 255, 0.05);
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 20px;
+
+            padding: 2.5rem;
+
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+
+        }
+
+
+
+        .section {
+
+            margin-bottom: 2.5rem;
+
+        }
+
+
+
+        .section-title {
+
+            font-size: 1.3rem;
+
+            font-weight: 600;
+
+            margin-bottom: 1rem;
+
+            color: #00f5ff;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 0.5rem;
+
+        }
+
+
+
+        .question {
+
+            margin-bottom: 1.5rem;
+
+        }
+
+
+
+        .question-text {
+
+            font-weight: 500;
+
+            margin-bottom: 0.8rem;
+
+            color: #e0e0e0;
+
+            line-height: 1.4;
+
+        }
+
+
+
+        .input-group {
+
+            position: relative;
+
+        }
+
+
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 0.8rem 1rem;
+
+            background: rgba(255, 255, 255, 0.05);
+
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            border-radius: 8px;
+
+            color: #ffffff;
+
+            font-size: 1rem;
+
+            transition: all 0.3s ease;
+
+        }
+
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            outline: none;
+
+            border-color: #00f5ff;
+
+            box-shadow: 0 0 0 2px rgba(0, 245, 255, 0.2);
+
+        }
+
+
+
+        .checkbox-group {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 0.8rem;
+
+        }
+
+
+
+        .checkbox-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 0.5rem;
+
+            padding: 0.5rem 1rem;
+
+            background: rgba(255, 255, 255, 0.05);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 25px;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            min-width: fit-content;
+
+        }
+
+
+
+        .checkbox-item:hover {
+
+            background: rgba(0, 245, 255, 0.1);
+
+            border-color: rgba(0, 245, 255, 0.3);
+
+        }
+
+
+
+        .checkbox-item input[type="checkbox"] {
+
+            width: auto;
+
+            margin: 0;
+
+        }
+
+
+
+        .radio-group {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 1rem;
+
+        }
+
+
+
+        .radio-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 0.5rem;
+
+            padding: 1rem;
+
+            background: rgba(255, 255, 255, 0.05);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+        }
+
+
+
+        .radio-item:hover {
+
+            background: rgba(0, 245, 255, 0.1);
+
+            border-color: rgba(0, 245, 255, 0.3);
+
+        }
+
+
+
+        .radio-item input[type="radio"] {
+
+            width: auto;
+
+            margin: 0;
+
+        }
+
+
+
+        .submit-btn {
+
+            width: 100%;
+
+            padding: 1rem 2rem;
+
+            background: linear-gradient(45deg, #00f5ff, #ff00ff);
+
+            border: none;
+
+            border-radius: 10px;
+
+            color: #ffffff;
+
+            font-size: 1.1rem;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            margin-top: 2rem;
+
+        }
+
+
+
+        .submit-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+
+        }
+
+
+
+        .disclaimer {
+
+            font-size: 0.9rem;
+
+            color: #a0a0a0;
+
+            text-align: center;
+
+            margin-top: 2rem;
+
+            line-height: 1.4;
+
+        }
+
+
+
+        .floating-elements {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            pointer-events: none;
+
+            z-index: -1;
+
+        }
+
+
+
+        .floating-element {
+
+            position: absolute;
+
+            width: 4px;
+
+            height: 4px;
+
+            background: rgba(0, 245, 255, 0.3);
+
+            border-radius: 50%;
+
+            animation: float 6s ease-in-out infinite;
+
+        }
+
+
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.8;
+            }
+
+        }
+
+
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            top: 40%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-element:nth-child(4) {
+            top: 80%;
+            left: 60%;
+            animation-delay: 1s;
+        }
+
+        .floating-element:nth-child(5) {
+            top: 10%;
+            left: 70%;
+            animation-delay: 3s;
+        }
+
+
+
+        @media (max-width: 768px) {
+
+            .container {
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="floating-elements">
+
+        <div class="floating-element"></div>
+
+        <div class="floating-element"></div>
+
+        <div class="floating-element"></div>
+
+        <div class="floating-element"></div>
+
+        <div class="floating-element"></div>
+
+    </div>
+
+
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1 class="logo">NEURAL GENESIS</h1>
+
+            <p class="subtitle">7-Day Elite Transformation Intensive<br>Where High-Performers Breakthrough to Their Next
+                Level</p>
+
+        </div>
+
+
+
+        <div class="warning-banner">
+
+            <h3>⚡ INVITATION ONLY ⚡</h3>
+
+            <p>This isn't for everyone. We're seeking 12 exceptional individuals ready for profound transformation.</p>
+
+        </div>
+
+
+
+        <div class="form-container">
+
+            <form id="eligibilityForm">
+
+                <div class="section">
+
+                    <h2 class="section-title">🎯 Your Current Position</h2>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">What's your current annual income range?</div>
+
+                        <div class="radio-group">
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="income" value="250k-500k" required>
+
+                                <span>$250K - $500K</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="income" value="500k-1m">
+
+                                <span>$500K - $1M</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="income" value="1m-5m">
+
+                                <span>$1M - $5M</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="income" value="5m+">
+
+                                <span>$5M+</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">Your current role/position:</div>
+
+                        <div class="input-group">
+
+                            <select name="role" required>
+
+                                <option value="">Select your role</option>
+
+                                <option value="ceo">CEO/Founder</option>
+
+                                <option value="executive">C-Suite Executive</option>
+
+                                <option value="entrepreneur">Serial Entrepreneur</option>
+
+                                <option value="investor">Investor/VC</option>
+
+                                <option value="professional">Elite Professional</option>
+
+                                <option value="creative">Creative Leader</option>
+
+                                <option value="other">Other High-Performer</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="section">
+
+                    <h2 class="section-title">🧠 Transformation Readiness</h2>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">What's driving your need for transformation right now?</div>
+
+                        <div class="checkbox-group">
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="performance">
+
+                                <span>Performance ceiling</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="stress">
+
+                                <span>Stress/burnout</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="meaning">
+
+                                <span>Lack of meaning</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="relationships">
+
+                                <span>Relationship issues</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="leadership">
+
+                                <span>Leadership challenges</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="drivers" value="legacy">
+
+                                <span>Legacy concerns</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">How much are you willing to invest in your transformation?</div>
+
+                        <div class="radio-group">
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="investment" value="10k-15k" required>
+
+                                <span>$10K - $15K</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="investment" value="15k-25k">
+
+                                <span>$15K - $25K</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="investment" value="25k+">
+
+                                <span>$25K+</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="section">
+
+                    <h2 class="section-title">🔥 Intensity Tolerance</h2>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">Have you done intensive personal development work before?</div>
+
+                        <div class="checkbox-group">
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="therapy">
+
+                                <span>Therapy/Coaching</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="meditation">
+
+                                <span>Meditation retreats</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="psychedelics">
+
+                                <span>Psychedelic therapy</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="breathwork">
+
+                                <span>Breathwork</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="somatic">
+
+                                <span>Somatic work</span>
+
+                            </label>
+
+                            <label class="checkbox-item">
+
+                                <input type="checkbox" name="experience" value="none">
+
+                                <span>None of the above</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">Rate your comfort with emotional intensity (1-10):</div>
+
+                        <div class="input-group">
+
+                            <input type="range" name="intensity" min="1" max="10" value="5" required>
+
+                            <div id="intensityValue" style="text-align: center; margin-top: 0.5rem; color: #00f5ff;">5
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="section">
+
+                    <h2 class="section-title">📊 Logistics</h2>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">Can you commit to 7 consecutive days of intensive work?</div>
+
+                        <div class="radio-group">
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="availability" value="yes" required>
+
+                                <span>Yes, absolutely</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="availability" value="maybe">
+
+                                <span>Need to check schedule</span>
+
+                            </label>
+
+                            <label class="radio-item">
+
+                                <input type="radio" name="availability" value="no">
+
+                                <span>Can't commit to 7 days</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">Your contact information:</div>
+
+                        <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+
+                            <input type="text" name="name" placeholder="Full Name" required>
+
+                            <input type="email" name="email" placeholder="Email Address" required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="question">
+
+                        <div class="question-text">In one sentence, what would make this retreat worth 10x the
+                            investment for you?</div>
+
+                        <div class="input-group">
+
+                            <textarea name="goal" rows="3"
+                                placeholder="The one breakthrough that would change everything..." required></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <button type="submit" class="submit-btn">CHECK MY ELIGIBILITY</button>
+
+            </form>
+
+
+
+            <div class="disclaimer">
+
+                By submitting this form, you're requesting an invitation to a private consultation.
+
+                Not all applicants will qualify. We're seeking individuals ready for profound transformation.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        // Intensity slider value display
+
+        const intensitySlider = document.querySelector('input[name="intensity"]');
+
+        const intensityValue = document.getElementById('intensityValue');
+
+
+
+        intensitySlider.addEventListener('input', function () {
+
+            intensityValue.textContent = this.value;
+
+            const percentage = (this.value - 1) / 9;
+
+            const hue = percentage * 120; // 0 (red) to 120 (green)
+
+            intensityValue.style.color = `hsl(${hue}, 70%, 60%)`;
+
+        });
+
+
+
+        // Form submission
+
+        document.getElementById('eligibilityForm').addEventListener('submit', function (e) {
+
+            e.preventDefault();
+
+
+
+            // Collect form data
+
+            const formData = new FormData(this);
+
+            const data = {};
+
+
+
+            // Handle regular inputs
+
+            for (let [key, value] of formData.entries()) {
+
+                if (data[key]) {
+
+                    if (Array.isArray(data[key])) {
+
+                        data[key].push(value);
+
+                    } else {
+
+                        data[key] = [data[key], value];
+
+                    }
+
+                } else {
+
+                    data[key] = value;
+
+                }
+
+            }
+
+
+
+            // Handle checkboxes
+
+            const checkboxGroups = ['drivers', 'experience'];
+
+            checkboxGroups.forEach(group => {
+
+                const checkedBoxes = document.querySelectorAll(`input[name="${group}"]:checked`);
+
+                data[group] = Array.from(checkedBoxes).map(cb => cb.value);
+
+            });
+
+
+
+            // Calculate eligibility score
+
+            const score = calculateEligibilityScore(data);
+
+
+
+            // Show result
+
+            showResult(score, data);
+
+        });
+
+
+
+        function calculateEligibilityScore(data) {
+
+            let score = 0;
+
+
+
+            // Income scoring
+
+            const incomeScore = {
+
+                '250k-500k': 1,
+
+                '500k-1m': 2,
+
+                '1m-5m': 3,
+
+                '5m+': 4
+
+            };
+
+            score += incomeScore[data.income] || 0;
+
+
+
+            // Role scoring
+
+            const roleScore = {
+
+                'ceo': 4,
+
+                'executive': 3,
+
+                'entrepreneur': 4,
+
+                'investor': 3,
+
+                'professional': 2,
+
+                'creative': 2,
+
+                'other': 1
+
+            };
+
+            score += roleScore[data.role] || 0;
+
+
+
+            // Investment willingness
+
+            const investmentScore = {
+
+                '25k+': 3,
+
+                '15k-25k': 2,
+
+                '10k-15k': 1
+
+            };
+
+            score += investmentScore[data.investment] || 0;
+
+
+
+            // Experience bonus
+
+            if (data.experience && data.experience.length > 2) score += 2;
+
+            else if (data.experience && data.experience.length > 0) score += 1;
+
+
+
+            // Intensity tolerance
+
+            if (data.intensity >= 8) score += 2;
+
+            else if (data.intensity >= 6) score += 1;
+
+
+
+            // Availability
+
+            if (data.availability === 'yes') score += 2;
+
+            else if (data.availability === 'maybe') score += 1;
+
+
+
+            return score;
+
+        }
+
+
+
+        function showResult(score, data) {
+
+            const resultHTML = `
+
+                <div style="text-align: center; padding: 2rem;">
+
+                    <h2 style="color: #00f5ff; margin-bottom: 1rem;">
+
+                        ${score >= 12 ? '🔥 HIGHLY QUALIFIED' :
+
+                    score >= 8 ? '⚡ POTENTIALLY QUALIFIED' :
+
+                        '💭 PRELIMINARY INTEREST'}
+
+                    </h2>
+
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #e0e0e0;">
+
+                        ${score >= 12 ? 'You meet our criteria for elite transformation. Expect a call within 24 hours.' :
+
+                    score >= 8 ? 'You show strong potential. We\'ll be in touch to discuss your readiness.' :
+
+                        'Thank you for your interest. We\'ll keep you informed of future opportunities.'}
+
+                    </p>
+
+                    <div style="background: rgba(0, 245, 255, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 2rem;">
+
+                        <strong>Next Steps:</strong><br>
+
+                        ${score >= 8 ? 'Check your email for our calendar link to schedule your private consultation.' :
+
+                    'Consider building more experience with intensive personal development work.'}
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+
+            document.querySelector('.form-container').innerHTML = resultHTML;
+
+
+
+            // In a real implementation, you'd send this data to your server
+
+            console.log('Eligibility Assessment:', { score, data });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
